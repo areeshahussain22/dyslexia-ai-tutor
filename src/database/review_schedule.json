@@ -1,0 +1,25 @@
+{
+    "alex": [
+        {
+            "topic_id": "lesson_4106",
+            "interval_days": 1,
+            "ease_factor": 2.6,
+            "repetitions": 1,
+            "next_review_date": "2026-06-18T08:04:43.334244"
+        },
+        {
+            "topic_id": "lesson_5013",
+            "interval_days": 1,
+            "ease_factor": 2.6,
+            "repetitions": 1,
+            "next_review_date": "2026-06-18T08:20:18.982094"
+        },
+        {
+            "topic_id": "lesson_8719",
+            "interval_days": 1,
+            "ease_factor": 2.1799999999999997,
+            "repetitions": 0,
+            "next_review_date": "2026-06-18T12:02:23.428462"
+        }
+    ]
+}

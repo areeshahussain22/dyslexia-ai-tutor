@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accessible Learning Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.122/pdf.min.js"></script>
+</head>
+<body>
+  <main class="page-shell">
+    <!-- Backend Connection Status -->
+    <div class="status-bar">
+      <div class="connection-status">
+        <span class="status-light" id="statusLight"></span>
+        <span class="status-text" id="connectionStatusText">Checking connection...</span>
+      </div>
+    </div>
+
+    <header class="hero-card">
+      <div>
+        <p class="eyebrow">Dyslexia-friendly</p>
+        <h1>Learn with PDF upload, flowcharts, comics, and audio</h1>
+        <p class="hero-copy">Choose the style that helps you focus best, then customize font size and colors as you read.</p>
+      </div>
+      <div class="hero-panel">
+        <label class="file-button" for="pdfInput">Upload a PDF</label>
+        <input id="pdfInput" type="file" accept="application/pdf" />
+        <p class="hint">Upload any PDF and then tap a content mode to explore it.</p>
+      </div>
+    </header>
+
+    <section class="controls-panel" aria-labelledby="settings-heading">
+      <div>
+        <h2 id="settings-heading">Reading controls</h2>
+        <div class="slider-group">
+          <label for="fontSizeRange">Font size: <span id="fontSizeValue">22px</span></label>
+          <input id="fontSizeRange" type="range" min="18" max="48" value="22" />
+        </div>
+        <div class="color-row">
+          <div>
+            <label for="bgColor">Background</label>
+            <input id="bgColor" type="color" value="#f2eee9" />
+          </div>
+          <div>
+            <label for="textColor">Text</label>
+            <input id="textColor" type="color" value="#1f2427" />
+          </div>
+          <div>
+            <label for="accentColor">Accent</label>
+            <input id="accentColor" type="color" value="#6c8e7f" />
+          </div>
+        </div>
+        <p class="hint">Use these to make reading easier for your eyes.</p>
+      </div>
+      <div>
+        <h2>Ready to explore</h2>
+        <div class="mode-grid">
+          <button class="mode-btn" data-mode="summary" disabled>Summary</button>
+          <button class="mode-btn" data-mode="flashcards" disabled>Flash cards</button>
+          <button class="mode-btn" data-mode="flowchart" disabled>Flowchart</button>
+          <button class="mode-btn" data-mode="mindmap" disabled>Mindmap</button>
+          <button class="mode-btn" data-mode="comics" disabled>Comics</button>
+          <button class="mode-btn" data-mode="audio" disabled>Audio</button>
+          <button class="mode-btn" data-mode="quiz" disabled>📝 Quiz</button>
+        </div>
+        <p class="hint">Tap a mode after uploading a PDF to see content instantly.</p>
+      </div>
+    </section>
+
+    <section class="output-panel" aria-live="polite">
+      <div class="output-header">
+        <div>
+          <h2>Content preview</h2>
+          <p id="statusText">Upload a PDF to begin.</p>
+        </div>
+        <button id="clearButton" class="ghost-btn" type="button" disabled>Clear</button>
+      </div>
+
+      <div id="contentArea" class="content-area">
+        <div class="empty-state">
+          <p>Once your PDF is loaded, choose one of the modes to see the content, comics, diagram, flashcards, or hear it read aloud.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

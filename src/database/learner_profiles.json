@@ -1,0 +1,14 @@
+{
+    "alex": {
+        "user_id": "alex",
+        "name": "Alex",
+        "dyslexia_level": "moderate",
+        "preferred_channels": [
+            "mixed"
+        ],
+        "reading_speed_wpm": 120,
+        "font_size": "18px",
+        "color_theme": "default",
+        "additional_preferences": {}
+    }
+}

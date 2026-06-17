@@ -1,0 +1,112 @@
+{
+    "alex": {
+        "user_id": "alex",
+        "completed_lessons": [
+            "lesson_4106",
+            "lesson_5013",
+            "lesson_8719"
+        ],
+        "quiz_scores": [
+            {
+                "quiz_id": "quiz_lesson_4106",
+                "score": 1.0,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T08:04:43.335306"
+            },
+            {
+                "quiz_id": "quiz_lesson_5013",
+                "score": 1.0,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T08:20:18.983133"
+            },
+            {
+                "quiz_id": "quiz_lesson_8719",
+                "score": 0.5,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T12:02:23.429462"
+            }
+        ],
+        "channel_engagement": {
+            "text": 0,
+            "audio": 0,
+            "visual": 0,
+            "comic": 0,
+            "mixed": 3
+        }
+    },
+    "guest": {
+        "user_id": "guest",
+        "completed_lessons": [
+            "lesson_8007"
+        ],
+        "quiz_scores": [
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 1.0,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:51:55.929672"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 0.5,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:51:57.566203"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 0.0,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:52:02.788463"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 0.0,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:53:02.276801"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 1.0,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:53:12.241778"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 0.5,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:53:12.727763"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 0.5,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:53:17.375175"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 0.5,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:53:20.606372"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 0.5,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:53:21.137758"
+            },
+            {
+                "quiz_id": "quiz_lesson_8007",
+                "score": 0.0,
+                "total_questions": 2,
+                "completed_at": "2026-06-17T13:53:24.303209"
+            }
+        ],
+        "channel_engagement": {
+            "text": 0,
+            "audio": 0,
+            "visual": 0,
+            "comic": 0,
+            "quiz": 10
+        }
+    }
+}

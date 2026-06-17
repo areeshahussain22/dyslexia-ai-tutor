@@ -1,0 +1,28 @@
+# ---- Core (needed from the start) ----
+openaI                # LLM + AI image generation for comics
+python-dotenv         # load API keys from .env
+pypdf                 # read text from PDFs
+chromadb              # vector store for RAG
+gTTS                  # text-to-speech (audio mode)
+
+# ---- LLM / image (optional, paid) ----
+# google-genai          # alt LLM provider (not used)
+
+# ---- RAG helpers ----
+numpy                 # numeric ops used by embeddings/vector store
+
+# ---- Testing ----
+pytest                # run the tests/ folder
+
+# ---- Better PDF extraction (optional) ----
+pdfplumber            # use if pypdf struggles with columns/tables
+
+# ---- Audio processing (optional) ----
+faster-whisper        # transcribe lecture audio to text
+
+# ---- Audio quality (optional) ----
+edge-tts              # better/free narration if gTTS isn't enough
+# ---- Web server support ----
+Flask                # lightweight backend server for the frontend
+# ---- Frontend (add when you build the UI) ----
+streamlit             # web frontend (renders Mermaid + SVG in browser)
