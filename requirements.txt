@@ -1,12 +1,10 @@
 # ---- Core (needed from the start) ----
-openaI                # LLM + AI image generation for comics
+openaI                # LLM for quizzes, adaptation, diagrams (optional)
+google-genai          # Gemini SVG comic generation
 python-dotenv         # load API keys from .env
 pypdf                 # read text from PDFs
 chromadb              # vector store for RAG
 gTTS                  # text-to-speech (audio mode)
-
-# ---- LLM / image (optional, paid) ----
-# google-genai          # alt LLM provider (not used)
 
 # ---- RAG helpers ----
 numpy                 # numeric ops used by embeddings/vector store

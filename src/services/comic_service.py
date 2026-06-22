@@ -2,69 +2,77 @@
 Comic Service implementation.
 Generates dyslexia-friendly learning comic strips to explain abstract topics.
 
-Supports two paths:
-  - PATH 1 (ACTIVE): OpenAI DALL-E image generation (requires OPENAI_API_KEY)
-  - PATH 2 (FALLBACK): SVG string generation for testing/offline mode
+Uses Gemini 2.5 Flash to generate structured SVG comic strips (requires GEMINI_API_KEY).
+Falls back to a static SVG template when the API is unavailable.
 """
 import os
-from src.config.settings import OPENAI_API_KEY
+import re
+
+from src.config.settings import GEMINI_API_KEY, GEMINI_MODEL
 from src.config.prompts import COMIC_GENERATION_PROMPT
 
 try:
-    from openai import OpenAI
+    from google import genai
 except ImportError:
-    OpenAI = None
+    genai = None
+
 
 class ComicService:
     def __init__(self):
-        """
-        Initializes the Comic Service with OpenAI client.
-        """
-        self.api_key = OPENAI_API_KEY or os.getenv("OPENAI_API_KEY")
-        if self.api_key and OpenAI is not None:
-            self.client = OpenAI(api_key=self.api_key)
+        """Initializes the Comic Service with the Gemini client."""
+        self.api_key = GEMINI_API_KEY or os.getenv("GEMINI_API_KEY")
+        self.model = GEMINI_MODEL or "gemini-2.5-flash"
+
+        if self.api_key and genai is not None:
+            self.client = genai.Client(api_key=self.api_key)
         else:
             self.client = None
 
-    # =========================================================================
-    # PATH 1 (ACTIVE DEFAULT): OpenAI DALL-E image generation
-    # =========================================================================
     def generate_comic_svg(self, topic: str, explanation: str) -> str:
         """
-        Uses OpenAI DALL-E to generate a dyslexia-friendly comic strip image.
-        
+        Uses Gemini to generate a dyslexia-friendly SVG comic strip.
+
         Args:
             topic (str): The subject area.
             explanation (str): Core educational content.
-            
+
         Returns:
-            str: Image URL or fallback SVG if API not available.
+            str: SVG markup, or fallback SVG if the API is unavailable.
         """
         if not self.client:
-            # Fallback mockup high-contrast stick figure SVG if API key is not set
             return self._generate_fallback_svg(topic, explanation)
 
         try:
-            prompt = f"Create a simple, dyslexia-friendly educational comic strip about: {topic}. {explanation}. Use clear colors, large fonts, and simple drawings."
-            
-            response = self.client.images.generate(
-                model="dall-e-3",
-                prompt=prompt,
-                size="1024x1024",
-                quality="standard",
-                n=1
+            prompt = COMIC_GENERATION_PROMPT.format(topic=topic, explanation=explanation)
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt,
             )
-            
-            # Return the image URL
-            return response.data[0].url
-        except Exception as e:
-            # Fallback to SVG if DALL-E fails
-            return self._generate_fallback_svg(topic, explanation)
+            svg = self._extract_svg(response.text or "")
+            if svg:
+                return svg
+        except Exception:
+            pass
+
+        return self._generate_fallback_svg(topic, explanation)
+
+    def _extract_svg(self, raw: str) -> str:
+        """Pull a valid SVG document out of the model response."""
+        cleaned = raw.strip()
+        cleaned = re.sub(r"^```(?:xml|svg|html)?\s*\n?", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"\n?```\s*$", "", cleaned)
+
+        match = re.search(r"(<svg[\s\S]*?</svg>)", cleaned, re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+
+        if cleaned.lstrip().lower().startswith("<svg"):
+            return cleaned
+
+        return ""
 
     def _generate_fallback_svg(self, topic: str, explanation: str) -> str:
-        """
-        Generates a fallback dyslexia-friendly SVG comic layout for test/offline use.
-        """
+        """Generates a fallback dyslexia-friendly SVG comic layout for test/offline use."""
         svg = (
             '<svg viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" style="background:#FDFBF7; border:3px solid #0D5C75; border-radius:8px;">'
             '  <!-- Header -->'
@@ -120,8 +128,3 @@ class ComicService:
             '</svg>'
         )
         return svg
-
-    # =========================================================================
-    # PATH 2 (FALLBACK): SVG string generation for testing/offline mode
-    # =========================================================================
-    # If OpenAI DALL-E fails or API key is not available, fallback to SVG generation.
