@@ -31,6 +31,9 @@ CORS(app,
 
 orchestrator = initialize_tutor()
 
+# In-memory store for uploaded lesson text (avoids huge JSON responses on upload)
+uploaded_lessons: dict[str, str] = {}
+
 
 @app.route("/api/health", methods=["GET"])
 def health_check():
@@ -73,11 +76,11 @@ def upload_pdf():
         raw_text = orchestrator.content_ingestion_agent.document_loader.load_pdf(str(upload_path))
         lesson_id = f"lesson_{abs(hash(raw_text)) % 10000}"
         preview_text = raw_text[:2500]
+        uploaded_lessons[lesson_id] = raw_text
 
         return jsonify({
             "fileName": filename,
             "previewText": preview_text,
-            "fullText": raw_text,
             "lessonId": lesson_id,
             "backend": True,
             "vectorDbStatus": "SUCCESS",
@@ -95,11 +98,13 @@ def upload_pdf():
 def mode_content():
     data = request.get_json(silent=True) or {}
     mode = data.get("mode")
-    text = data.get("text", "")
     lesson_id = data.get("lessonId", "lesson_ui")
+    text = uploaded_lessons.get(lesson_id, "") or data.get("text", "")
 
-    if not mode or not text:
-        return jsonify({"error": "Mode and text are required."}), 400
+    if not mode:
+        return jsonify({"error": "Mode is required."}), 400
+    if not text:
+        return jsonify({"error": "No lesson text found. Upload a PDF first."}), 400
 
     try:
         if mode == "summary":
@@ -245,4 +250,5 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8000, debug=True)
+    # use_reloader=False prevents Windows watchdog restarts from dropping in-flight uploads
+    app.run(host="127.0.0.1", port=8000, debug=True, use_reloader=False, threaded=True)

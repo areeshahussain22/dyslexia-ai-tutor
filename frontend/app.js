@@ -15,7 +15,9 @@ let currentPdfText = '';
 let currentMode = null;
 let currentLessonId = 'lesson_ui';
 let backendConnected = false;
-const BACKEND_URL = 'http://127.0.0.1:8000';
+const BACKEND_URL = (window.location.protocol === 'file:' || !window.location.origin || window.location.origin === 'null')
+  ? 'http://127.0.0.1:8000'
+  : window.location.origin;
 
 // Check backend connection on page load
 async function checkBackendConnection() {
@@ -37,6 +39,9 @@ async function checkBackendConnection() {
 
 // Check connection on page load
 document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.protocol === 'file:') {
+    statusText.textContent = 'Open http://127.0.0.1:8000 in your browser (do not open index.html directly).';
+  }
   checkBackendConnection();
   setInterval(checkBackendConnection, 10000); // Check every 10 seconds
 });
@@ -226,7 +231,6 @@ async function callModeApi(mode) {
       },
       body: JSON.stringify({
         mode,
-        text: currentPdfText,
         lessonId: currentLessonId
       })
     });
@@ -274,10 +278,18 @@ async function uploadPdf(file) {
   const uploadData = new FormData();
   uploadData.append('pdf', file);
 
-  const response = await fetch(`${BACKEND_URL}/api/upload`, {
-    method: 'POST',
-    body: uploadData
-  });
+  let response;
+  try {
+    response = await fetch(`${BACKEND_URL}/api/upload`, {
+      method: 'POST',
+      body: uploadData
+    });
+  } catch (error) {
+    if (window.location.protocol === 'file:') {
+      throw new Error('Cannot upload from a local file. Start the server and open http://127.0.0.1:8000');
+    }
+    throw new Error(`Could not reach backend at ${BACKEND_URL}. Start it with: python src/backend.py`);
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
@@ -303,7 +315,7 @@ pdfInput.addEventListener('change', async event => {
     // Show processing progress
     statusText.textContent = '⚙️ Processing (chunking & storing)...';
     
-    currentPdfText = data.fullText || '';
+    currentPdfText = data.previewText || '';
     currentLessonId = data.lessonId || 'lesson_ui';
     
     // Show vector DB storage status

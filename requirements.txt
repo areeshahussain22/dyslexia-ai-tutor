@@ -22,5 +22,6 @@ faster-whisper        # transcribe lecture audio to text
 edge-tts              # better/free narration if gTTS isn't enough
 # ---- Web server support ----
 Flask                # lightweight backend server for the frontend
+flask-cors           # allow frontend requests to the API
 # ---- Frontend (add when you build the UI) ----
 streamlit             # web frontend (renders Mermaid + SVG in browser)
