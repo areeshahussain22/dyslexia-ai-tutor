@@ -1,5 +1,6 @@
 import json
 import sys
+import os
 from pathlib import Path
 
 # Ensure the project root is on sys.path when launching via python src/backend.py
@@ -245,4 +246,6 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8000, debug=True)
+    #app.run(host="127.0.0.1", port=8000, debug=True)
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host="0.0.0.0", port=port, debug=False)
