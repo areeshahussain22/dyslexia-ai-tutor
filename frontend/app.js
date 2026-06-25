@@ -1,4 +1,4 @@
-const pdfInput = document.getElementById('pdfInput');
+﻿const pdfInput = document.getElementById('pdfInput');
 const statusText = document.getElementById('statusText');
 const contentArea = document.getElementById('contentArea');
 const modeButtons = Array.from(document.querySelectorAll('.mode-btn'));
@@ -11,15 +11,39 @@ const accentColor = document.getElementById('accentColor');
 
 let currentPdfText = '';
 let currentMode = null;
+let currentLessonId = 'lesson_ui';
+let backendConnected = false;
+// const BACKEND_URL = (window.location.protocol === 'file:' || !window.location.origin || window.location.origin === 'null')
+//   ? 'http://127.0.0.1:8000'
+//   : window.location.origin;
+const BACKEND_URL = 'https://dyslexia-ai-tutor-production.up.railway.app';
 
-const sampleOutputs = {
-  summary: `\nSummary:\n\n- The document explains how to make learning easier with pictures, sound, and shorter text blocks.\n- It encourages reading using comfortable fonts and color themes.\n- It also suggests using visual tools such as mind maps and comics for better memory.\n`,
-  flashcards: `\nFlash cards:\n\n1. What helps dyslexic learners focus?\n   - Clear fonts, bigger text, and calm colors.\n2. Why use comics?\n   - Comics add meaning with images and simple captions.\n3. What does audio support?\n   - It helps learners hear the material while reading along.\n`,
-  flowchart: `flowchart TD\n  A[PDF upload] --> B[Choose a mode]\n  B --> C{Pick one}\n  C --> D[Summary]\n  C --> E[Comics]\n  C --> F[Mindmap]\n  C --> G[Audio]\n  C --> H[Flash cards]\n  C --> I[Flowchart]\n  D --> J[Read easy text]\n  E --> K[See fun images]\n  F --> L[Review main ideas]\n  G --> M[Listen while reading]\n  H --> N[Practice key facts]\n  I --> O[Follow a path]`,
-  mindmap: `mindmap\n  root((PDF study))\n    Summary\n      Comfortable text\n      Short points\n    Comics\n      Friendly panels\n      Speech bubbles\n    Audio\n      Listen along\n      Calm pace\n    Flash cards\n      Quick reviews\n    Flowchart\n      Step-by-step`,
-  comics: `\nComics idea:\n\nPanel 1: A smiling student sits at a desk with a PDF on screen. Caption: "I can upload a PDF and pick how I want to learn."\nPanel 2: The same student chooses a flowchart and a comic. Caption: "Big text, clear colors, and fun visuals help me focus."\nPanel 3: The student listens to audio while reading. Caption: "Audio makes it easy to follow along."\n`,
-  audio: `Audio mode:\n\nListen to the content with simple narration, steady pace, and short sentences.\n\n[Audio playback will be generated here after upload in a real app.]\n`,
-};
+// Check backend connection on page load
+async function checkBackendConnection() {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/health`, { method: 'GET' });
+    if (response.ok) {
+      backendConnected = true;
+      statusLight.className = 'status-light connected';
+      connectionStatusText.textContent = '✓ Backend Connected';
+      connectionStatusText.style.color = '#0B6623';
+    }
+  } catch (error) {
+    backendConnected = false;
+    statusLight.className = 'status-light disconnected';
+    connectionStatusText.textContent = '✗ Backend Disconnected';
+    connectionStatusText.style.color = '#B22222';
+  }
+}
+
+// Check connection on page load
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.protocol === 'file:') {
+    statusText.textContent = 'Open http://127.0.0.1:8000 in your browser (do not open index.html directly).';
+  }
+  checkBackendConnection();
+  setInterval(checkBackendConnection, 10000); // Check every 10 seconds
+});
 
 function setContentStyle() {
   const root = document.documentElement;
