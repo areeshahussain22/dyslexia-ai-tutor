@@ -15,9 +15,10 @@ let currentPdfText = '';
 let currentMode = null;
 let currentLessonId = 'lesson_ui';
 let backendConnected = false;
-const BACKEND_URL = (window.location.protocol === 'file:' || !window.location.origin || window.location.origin === 'null')
-  ? 'http://127.0.0.1:8000'
-  : window.location.origin;
+// const BACKEND_URL = (window.location.protocol === 'file:' || !window.location.origin || window.location.origin === 'null')
+//   ? 'http://127.0.0.1:8000'
+//   : window.location.origin;
+const BACKEND_URL = 'https://dyslexia-ai-tutor-production.up.railway.app';
 
 // Check backend connection on page load
 async function checkBackendConnection() {
